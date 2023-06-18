@@ -19,7 +19,7 @@ class BabylonJSViewer extends StatefulWidget {
   }) : super(key: key);
 
   final String src;
-  final ValueChanged<WebViewController>? controller;
+  WebViewController? controller;
   final String? functions;
 
   @override
@@ -53,7 +53,12 @@ class _BabylonJSViewerState extends State<BabylonJSViewer> {
   @override
   Widget build(final BuildContext context) {
     if (_proxy != null) {
-      return WebView(
+      return WebViewWidget(
+          controller: (widget.controller ?? WebViewController())
+            ..loadRequest(
+                Uri.parse('http://${_proxy!.address.address}:${_proxy!.port}/'))
+            ..setJavaScriptMode(JavaScriptMode
+                .unrestricted)); /*WebView(
         debuggingEnabled: true,
         backgroundColor: Colors.white,
         javascriptMode: JavascriptMode.unrestricted,
@@ -78,7 +83,7 @@ class _BabylonJSViewerState extends State<BabylonJSViewer> {
         onPageStarted: (url) {
           print('>>>> BabylonJS Viewer loading url... <$url>'); // DEBUG
         },
-      );
+      );*/
     } else {
       return Center(
         child: CircularProgressIndicator(),
